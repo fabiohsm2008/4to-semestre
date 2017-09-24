@@ -13,7 +13,7 @@ void swap(int *a, int *b){
 void generar(int *a, int tam){
     srand(time(NULL));
     for(int i = 0; i < tam; i++){
-        a[i] = rand()%50;
+        a[i] = rand()%100000;
     }
 }
 
@@ -31,11 +31,12 @@ void imprimir(int *a, int tam){
 }
 
 bool menor(int *a, int *b){
-	return *a>*b;
+	return (*a > *b);
 }
 
-bool mayor(int *a, int *b){
-	return *a<*b;
+bool mayor(int
+           *a, int *b){
+	return (*a < *b);
 }
 
 void CoctailSort(int *p, int *q, bool (*comparar)(int *a, int *b)){
@@ -68,14 +69,16 @@ int main()
     int tama;
     cout << "Ingrese el largo: ";
     cin >> tama;
-    tama = 3;
-    int a[tama];
+    int *a = new int[tama];
 
     generar(a,tama);
-    imprimir(a,tama);
-
-    CoctailSort(a,a+tama,menor);
-    imprimir(a,tama);
+    //imprimir(a,tama);
+    cout << endl;
+    time_t inicio = time(NULL);
+    CoctailSort(a,a+tama-1,menor);
+    time_t fin = time(NULL);
+    cout << difftime(fin,inicio) << endl;
+    //imprimir(a,tama);
 
     return 0;
 }

@@ -24,16 +24,15 @@ void imprimir(int *a, int tam){
 }
 
 void swap(int *a, int *b){
-    int *temp = a;
+    int temp = *a;
     *a = *b;
-    *b = *temp;
+    *b = temp;
 }
 
 class cocktail{
-private:
-    virtual bool comparar(int *a, int *b) = 0;
 public:
     cocktail(){};
+    virtual bool comparar(int *a, int *b) = 0;
     void ordenar(int *p, int *q){
         int *temp=p;
         bool intercambio=1;
@@ -77,14 +76,16 @@ public:
 
 int main(){
     srand(time(NULL));
-    int *a = new int[1000000];
+    int *a = new int[100000];
 
-    for(long long i = 0; i < 1000000; i++){
-        a[i] = rand()%10000;
-    }
-
+    generar(a,100000);
+    //imprimir(a,1000000);
+    cout << endl;
     mayor valor;
-    valor.ordenar(a,(a+1000000-1));
-    imprimir(a,1000000);
+    time_t inicio = time(NULL);
+    valor.ordenar(a,(a+100000-1));
+    time_t fin = time(NULL);
+    cout << "Duracion del algoritmo: " << difftime(fin,inicio) << endl;
+    //imprimir(a,100000);
     return 0;
 }

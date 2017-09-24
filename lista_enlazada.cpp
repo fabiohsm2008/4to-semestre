@@ -9,9 +9,8 @@ public:
     T Dato;
     nodo* next;
     nodo(){};
-    nodo(T s, nodo* sgt){
+    nodo(T s){
         Dato = s;
-        next = sgt;
     };
     ~nodo(){};
 };
@@ -30,39 +29,42 @@ public:
             cout << (temp)->Dato << " ";
             temp = (temp)->next;
         }
+        cout << endl;
     };
     bool buscar(Q a, nodo<Q>**& p){
-        nodo<Q> *guardar = head;
-        while(a > (*p)->Dato && (*p)->next != NULL){
-            *p = (*p)->next;
-        }
-        head = guardar;
-        if((*p)->Dato == a){
-            return 1;
-        }
-        else{
-            return 0;
-        }
+        for(p = &head; *p && (*p)->Dato < a; p = &((*p)->next));
+        return (*p) && (*p)->Dato == a;
     };
-    void insertar(Q a){
-        nodo<Q> **temp = &head;
-        if(!buscar(a,temp)){
-            nodo<Q> *nuevo = new nodo<Q>(a,(*temp)->next);
-            (*temp)->next = nuevo;
-        }
+    bool insertar(Q a){
+        nodo<Q> **p;
+        if(buscar(a,p)) return 0;
+        nodo<Q> *t = new nodo<Q>(a);
+        t->next = (*p);
+        *p = t;
+        return 1;
     };
-    void borrar(Q a){
-
+    bool borrar(Q a){
+        nodo<Q> **p;
+        if(!buscar(a,p)) return 0;
+        nodo<Q>* t = *p;
+        *p = (*p)->next;
+        delete t;
+        return 1;
     };
 };
 
 int main(){
-    nodo<int> head(0,NULL);
+    nodo<int> head(0);
+    head.next = NULL;
     lista<int> prueba(head);
+    prueba.insertar(1);
     prueba.insertar(2);
     prueba.insertar(3);
     prueba.insertar(4);
     prueba.insertar(5);
+    prueba.imprimir();
+    prueba.borrar(3);
+    prueba.borrar(2);
     prueba.imprimir();
     return 0;
 }
