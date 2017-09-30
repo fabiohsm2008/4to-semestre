@@ -42,6 +42,7 @@ public:
             }
         }
         if(temp->valor < a){
+            if(p != NULL && p->valor == a) return 0;
             temp->next = nuevo;
             nuevo->next = p;
             return 1;
@@ -101,6 +102,7 @@ int main(){
     prueba.insertar(3);
     prueba.insertar(4);
     prueba.insertar(2);
+    prueba.insertar(6);
     prueba.insertar(6);
     prueba.insertar(5);
     prueba.insertar(7);
