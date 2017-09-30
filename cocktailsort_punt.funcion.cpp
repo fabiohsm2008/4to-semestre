@@ -66,18 +66,12 @@ void CoctailSort(int *p, int *q, bool (*comparar)(int *a, int *b)){
 
 int main()
 {
-    int tama;
-    cout << "Ingrese el largo: ";
-    cin >> tama;
-    int *a = new int[tama];
+    srand(time(NULL));
+    int *a = new int[100000];
 
-    generar(a,tama);
+    generar(a,100000);
     //imprimir(a,tama);
-    cout << endl;
-    time_t inicio = time(NULL);
-    CoctailSort(a,a+tama-1,menor);
-    time_t fin = time(NULL);
-    cout << difftime(fin,inicio) << endl;
+    CoctailSort(a,a+100000-1,menor);
     //imprimir(a,tama);
 
     return 0;

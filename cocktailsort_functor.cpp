@@ -83,9 +83,8 @@ int main(){
 
     generar(a,100000);
     //imprimir(a,100000);
-    cout << endl;
     cocktail <cmp_mayor<int> > prueba;
     prueba.ordenar(a,a+100000-1);
-    imprimir(a,100000);
+    //imprimir(a,100000);
     return 0;
 }

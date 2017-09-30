@@ -80,12 +80,8 @@ int main(){
 
     generar(a,100000);
     //imprimir(a,1000000);
-    cout << endl;
     mayor valor;
-    time_t inicio = time(NULL);
     valor.ordenar(a,(a+100000-1));
-    time_t fin = time(NULL);
-    cout << "Duracion del algoritmo: " << difftime(fin,inicio) << endl;
     //imprimir(a,100000);
     return 0;
 }
