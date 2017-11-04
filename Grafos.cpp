@@ -6,7 +6,7 @@ using namespace std;
 template <typename G>
 struct CNode{
     typedef typename G::Edge Edge;
-    typedef typename G::N N;
+    typedef typename G::n N;
     N m_data;
     vector<Edge*> m_edges;
 };
@@ -35,10 +35,16 @@ public:
     bool deleteNode(n dato){
 
     }
-    bool removeEdge()
+    bool insertEdge(){
+
+    }
+    bool removeEdge(){
+
+    }
 };
 
 int main(){
     CGraph<int,char> hola;
     return 0;
 }
+
