@@ -24,19 +24,19 @@ struct CEdge{
 };
 
 template <class G>
-struct Recorrido{
+struct Cam{
     typedef typename G::Node Node;
     typedef typename G::e E;
     vector<Node*> nodos_recorrido;
     E peso_actual;
-    Recorrido(Node *actual){nodos_recorrido.push_back(actual); peso_actual = 0;};
-    imprimir(){
+    Cam(Node *actual){nodos_recorrido.push_back(actual); peso_actual = 0;};
+    void imprimir(){
         int i;
         for(i = 0; i < nodos_recorrido.size()-1; i++){
             cout << nodos_recorrido[i]->m_data << "---->";
         }
         cout << nodos_recorrido[i]->m_data << " " << peso_actual << endl;
-    }
+    };
 };
 
 template <class N, class E>
@@ -45,7 +45,7 @@ public:
     typedef CGraph<N,E> Self;
     typedef CNode<Self> Node;
     typedef CEdge<Self> Edge;
-    typedef Recorrido<Self> Recorrido;
+    typedef Cam<Self> Recorrido;
     typedef N n;
     typedef E e;
     vector<Node*> m_node;
@@ -140,7 +140,7 @@ public:
         Recorrido act(n);
         act.nodos_recorrido.push_back(arista->m_nodes[1]);
         act.peso_actual += arista->m_data;
-        res.push_back(act);
+        res.push_back(act);          
     }
     void Dikjstra(n nombre){
         vector<Recorrido> resultado;
@@ -161,29 +161,28 @@ public:
 };
 
 int main(){
-    CGraph<char,int> hola;
-    hola.insertNode('A');
-    hola.insertNode('B');
-    hola.insertNode('C');
-    hola.insertNode('D');
-    hola.insertNode('E');
-    hola.insertNode('F');
+    CGraph<int,int> hola;
+    hola.insertNode(1);
+    hola.insertNode(2);
+    hola.insertNode(3);
+    hola.insertNode(4);
+    hola.insertNode(5);
+    hola.insertNode(6);
     hola.imprimir_nodos();
     cout << endl;
 
-    hola.insertEdge('A', 'B', 3, 1);
-    hola.insertEdge('A', 'C', 4, 1);
-    hola.insertEdge('B', 'C', 5, 1);
-    hola.insertEdge('C', 'D', 1, 1);
-    hola.insertEdge('B', 'E', 1, 1);
-    hola.insertEdge('E', 'F', 3, 1);
-    hola.insertEdge('D', 'F', 2, 1);
-    hola.insertEdge('F', 'A', 6, 1);
+    hola.insertEdge(1, 2, 7, 0);
+    hola.insertEdge(1, 3, 9, 0);
+    hola.insertEdge(1, 6, 14, 0);
+    hola.insertEdge(2, 4, 15, 0);
+    hola.insertEdge(2, 3, 10, 0);
+    hola.insertEdge(3, 6, 2, 0);
+    hola.insertEdge(3, 4, 11, 0);
+    hola.insertEdge(6, 5, 9, 0);
+    hola.insertEdge(4, 5, 6, 0);
     hola.imprimir_edge();
     cout << endl;
 
-    hola.Dikjstra('A');
+    hola.Dikjstra(1);
     return 0;
 }
-
-
