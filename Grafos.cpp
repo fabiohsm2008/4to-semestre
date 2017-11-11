@@ -33,7 +33,7 @@ struct Recorrido{
     imprimir(){
         int i;
         for(i = 0; i < nodos_recorrido.size()-1; i++){
-            cout << nodos_recorrido[i]->m_data << "------>";
+            cout << nodos_recorrido[i]->m_data << "---->";
         }
         cout << nodos_recorrido[i]->m_data << " " << peso_actual << endl;
     }
@@ -120,30 +120,42 @@ public:
     void imprimir_edge(){
         for(int i = 0; i < m_node.size(); i++){
             for(int j = 0; j < m_node[i]->m_edges.size(); j++){
-                if(m_node[i]->m_edges[j]->m_dir && (m_node[i]->m_edges[j]->m_nodes[0] == m_node[i])){
-                    cout << m_node[i]->m_edges[j]->m_data << ": " << m_node[i]->m_edges[j]->m_nodes[0]->m_data << " " << m_node[i]->m_edges[j]->m_nodes[1]->m_data << endl;
-                }
-                else if(!m_node[i]->m_edges[j]->m_dir && m_node[i]->m_edges[j]->m_nodes[0] == m_node[i]){
+                if((m_node[i]->m_edges[j]->m_nodes[0] == m_node[i])){
                     cout << m_node[i]->m_edges[j]->m_data << ": " << m_node[i]->m_edges[j]->m_nodes[0]->m_data << " " << m_node[i]->m_edges[j]->m_nodes[1]->m_data << endl;
                 }
             }
         }
     }
-    void busqueda(Recorrido &temp, Node* buscado){
-        for(int i = 0; i < temp->nodos_recorrido[0]->m_edges.size(); i++){
-            Recorrido actual(temp->nodos_recorrido[0]);
-
+    bool pos_node(Edge *arista, Node *actual){
+        if(arista->m_nodes[0] == actual) return 0;
+        return 1;
+    }
+    Recorrido *camino(vector<Recorrido> lerute, Node *actual){
+        for(int i = 0; i < lerute.size(); i++){
+            if(lerute[i]->nodos_recorrido[lerute[i]->nodos_recorrido.size()-1] == actual) return lerute[i];
         }
+        return 0;
+    }
+    void busqueda(vector<Recorrido> &res, Node *n, Edge *arista){
+        Recorrido act(n);
+        act.nodos_recorrido.push_back(arista->m_nodes[1]);
+        act.peso_actual += arista->m_data;
+        res.push_back(act);
     }
     void Dikjstra(n nombre){
         vector<Recorrido> resultado;
         int pos;
         if(buscar_nodo(nombre,pos)){
-            for(int i = 0; i < m_node.size(); i++){
-                Recorrido in(m_node[pos]);
-                busqueda(in, m_node[i]);
-                in.imprimir();
+            Recorrido actual(m_node[pos]);
+            resultado.push_back(actual);
+            for(int i = 0; i < m_node[pos]->m_edges.size(); i++){
+                if(!(pos_node(m_node[pos]->m_edges[i],m_node[pos]) && m_node[pos]->m_edges[i]->m_dir)){
+                        busqueda(resultado, m_node[pos], m_node[pos]->m_edges[i]);
+                }
             }
+        }
+        for(int i = 0; i < resultado.size(); i++){
+            resultado[i].imprimir();
         }
     }
 };
@@ -166,7 +178,12 @@ int main(){
     hola.insertEdge('B', 'E', 1, 1);
     hola.insertEdge('E', 'F', 3, 1);
     hola.insertEdge('D', 'F', 2, 1);
+    hola.insertEdge('F', 'A', 6, 1);
     hola.imprimir_edge();
+    cout << endl;
+
+    hola.Dikjstra('A');
     return 0;
 }
+
 
