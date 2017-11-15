@@ -10,7 +10,9 @@ struct CNode{
     N m_data;
     int id;
     vector<Edge*> m_edges;
-    CNode(N valor){m_data = valor;};
+    bool visitado;
+    CNode(N valor){m_data = valor; visitado = 0;};
+    void pintar(){visitado = 1;};
 };
 
 template <class G>
@@ -120,7 +122,7 @@ public:
     void imprimir_edge(){
         for(int i = 0; i < m_node.size(); i++){
             for(int j = 0; j < m_node[i]->m_edges.size(); j++){
-                if((m_node[i]->m_edges[j]->m_nodes[0] == m_node[i])){
+                if(!(pos_node(m_node[i]->m_edges[j],m_node[i]))){
                     cout << m_node[i]->m_edges[j]->m_data << ": " << m_node[i]->m_edges[j]->m_nodes[0]->m_data << " " << m_node[i]->m_edges[j]->m_nodes[1]->m_data << endl;
                 }
             }
@@ -130,17 +132,52 @@ public:
         if(arista->m_nodes[0] == actual) return 0;
         return 1;
     }
-    Recorrido *camino(vector<Recorrido> lerute, Node *actual){
+    Recorrido camino(vector<Recorrido> lerute, Node *actual){
         for(int i = 0; i < lerute.size(); i++){
-            if(lerute[i]->nodos_recorrido[lerute[i]->nodos_recorrido.size()-1] == actual) return lerute[i];
+            if(lerute[i].nodos_recorrido[lerute[i].nodos_recorrido.size()-1] == actual) return lerute[i];
+        }
+        return Recorrido(actual);
+    }
+    bool bus_rec(Recorrido r, Node *n){
+        for(int i = 0; i < r.nodos_recorrido.size(); i++){
+            if(r.nodos_recorrido[i] == n){
+                return 1;
+            }
         }
         return 0;
     }
+    void nivelar(vector<Recorrido> &res){
+        bool rpta = true;
+        while(rpta){
+            rpta = false;
+            for(int i = 0; i < res.size(); i++){
+                for(int j = i+1; j < res.size(); j++){
+                    if(res[i].nodos_recorrido[0] == res[j].nodos_recorrido[0] && res[i].nodos_recorrido[res[i].nodos_recorrido.size()-1] == res[j].nodos_recorrido[res[j].nodos_recorrido.size()-1]){
+                        if(res[i].peso_actual < res[j].peso_actual){
+                            res.erase(res.begin()+j);
+                        }
+                        else{
+                            res.erase(res.begin()+i);
+                        }
+                        rpta = true;
+                    }
+                }
+            }
+        }
+    }
     void busqueda(vector<Recorrido> &res, Node *n, Edge *arista){
-        Recorrido act(n);
+        Recorrido act = camino(res, arista->m_nodes[0]);
         act.nodos_recorrido.push_back(arista->m_nodes[1]);
         act.peso_actual += arista->m_data;
-        res.push_back(act);          
+        res.push_back(act);
+        for(int i = 0; i < n->m_edges.size(); i++){
+                if(!(pos_node(n->m_edges[i],n) && n->m_edges[i]->m_dir)){
+                    if(!bus_rec(act,n->m_edges[i]->m_nodes[1])){
+                        nivelar(res);
+                        busqueda(res, n->m_edges[i]->m_nodes[1], n->m_edges[i]);
+                    }
+                }
+            }
     }
     void Dikjstra(n nombre){
         vector<Recorrido> resultado;
@@ -150,10 +187,11 @@ public:
             resultado.push_back(actual);
             for(int i = 0; i < m_node[pos]->m_edges.size(); i++){
                 if(!(pos_node(m_node[pos]->m_edges[i],m_node[pos]) && m_node[pos]->m_edges[i]->m_dir)){
-                        busqueda(resultado, m_node[pos], m_node[pos]->m_edges[i]);
+                        busqueda(resultado, m_node[pos]->m_edges[i]->m_nodes[1], m_node[pos]->m_edges[i]);
                 }
             }
         }
+        nivelar(resultado);
         for(int i = 0; i < resultado.size(); i++){
             resultado[i].imprimir();
         }
@@ -161,28 +199,29 @@ public:
 };
 
 int main(){
-    CGraph<int,int> hola;
-    hola.insertNode(1);
-    hola.insertNode(2);
-    hola.insertNode(3);
-    hola.insertNode(4);
-    hola.insertNode(5);
-    hola.insertNode(6);
+    CGraph<char,int> hola;
+    hola.insertNode('1');
+    hola.insertNode('2');
+    hola.insertNode('3');
+    hola.insertNode('4');
+    hola.insertNode('5');
+    hola.insertNode('6');
     hola.imprimir_nodos();
     cout << endl;
 
-    hola.insertEdge(1, 2, 7, 0);
-    hola.insertEdge(1, 3, 9, 0);
-    hola.insertEdge(1, 6, 14, 0);
-    hola.insertEdge(2, 4, 15, 0);
-    hola.insertEdge(2, 3, 10, 0);
-    hola.insertEdge(3, 6, 2, 0);
-    hola.insertEdge(3, 4, 11, 0);
-    hola.insertEdge(6, 5, 9, 0);
-    hola.insertEdge(4, 5, 6, 0);
+    hola.insertEdge('1', '2', 7, 0);
+    hola.insertEdge('1', '3', 9, 0);
+    hola.insertEdge('1', '6', 14, 0);
+    hola.insertEdge('2', '4', 15, 0);
+    hola.insertEdge('2', '3', 10, 0);
+    hola.insertEdge('3', '6', 2, 0);
+    hola.insertEdge('3', '4', 11, 0);
+    hola.insertEdge('6', '5', 9, 0);
+    hola.insertEdge('4', '5', 6, 0);
     hola.imprimir_edge();
     cout << endl;
 
-    hola.Dikjstra(1);
+    hola.Dikjstra('1');
     return 0;
 }
+
