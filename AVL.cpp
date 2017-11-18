@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <math.h>
 
 using namespace std;
 
@@ -23,10 +24,13 @@ public:
     void actu_altura(node<T>* hola){
         int izq = 0;
         int der = 0;
-        if(hola->hijos[0]) izq += hola->hijos[0]->nivel + 1;
-        if(hola->hijos[1]) der += hola->hijos[1]->nivel + 1;
-        if(izq>der) hola->nivel = izq;
-        else hola->nivel = der;
+        if(hola->hijos[0]){
+            izq = sqrt(pow(hola->hijos[0]->nivel,2)) + 1;
+        }
+        if(hola->hijos[1]){
+            der = sqrt(pow(hola->hijos[1]->nivel,2)) + 1;
+        }
+        hola->nivel = sqrt(pow(der,2)) - sqrt(pow(izq,2));
     }
     bool balanceo(node<T> *hola){
 
@@ -101,15 +105,17 @@ public: inline bool operator()(T a, T b){
 
 int main(){
     AVL_Tree<int,cmp_menor<int> > arbol;
+    arbol.insertar(9);
+    arbol.insertar(8);
+    arbol.insertar(7);
+    arbol.insertar(6);
     arbol.insertar(1);
     arbol.insertar(2);
-    arbol.insertar(3);
-    arbol.insertar(4);
     arbol.insertar(5);
-    arbol.insertar(6);
-    arbol.insertar(7);
-    arbol.insertar(8);
-    arbol.insertar(9);
+    arbol.insertar(4);
+    arbol.insertar(3);
+
     arbol.imprimir();
     return 0;
 }
+
