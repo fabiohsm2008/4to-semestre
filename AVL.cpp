@@ -63,6 +63,9 @@ public:
         node<T> *t = *p;
         *p = (*p)->hijos[(*p)->hijos[1] != 0];
         delete t;
+        for(int i = recorrido.size()-1; i >= 0; i--){
+            actu_altura(recorrido[i]);
+        }
         return 1;
     };
     void pre_orden(node<T> *p){
