@@ -133,6 +133,7 @@ public:
             node<T> **q = p;
             q = &((*q)->hijos[1]);
             while((*q)->hijos[0]){
+                recorrido.push_back(q);
                 q = &((*q)->hijos[0]);
             }
             (*p)->valor = (*q)->valor;
@@ -212,13 +213,20 @@ int main(){
     arbol.insertar(4);
     arbol.insertar(5);
     arbol.insertar(6);
-    //arbol.print(arbol.raiz);
-    arbol.imprimir();
+    arbol.print(arbol.raiz);
+    //arbol.imprimir();
     cout << "------------------------------------" << endl;
-    arbol.eliminar(2);
-    arbol.imprimir();
-    //arbol.print(arbol.raiz);
+    arbol.eliminar(3);
+    //arbol.imprimir();
+    arbol.print(arbol.raiz);
+    cout << "------------------------------------" << endl;
+    arbol.eliminar(4);
+    //arbol.imprimir();
+    arbol.print(arbol.raiz);
+    cout << "------------------------------------" << endl;
+    arbol.eliminar(5);
+    //arbol.imprimir();
+    arbol.print(arbol.raiz);
 
     return 0;
 }
-
